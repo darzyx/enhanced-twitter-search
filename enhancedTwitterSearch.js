@@ -1,6 +1,5 @@
 const enhancedTwitterSearch = () => {
   // UTILITIES
-  const head = document.head;
   const querySelector = document.querySelector.bind(document);
   const createElement = document.createElement.bind(document);
   const createTextNode = document.createTextNode.bind(document);
@@ -12,20 +11,21 @@ const enhancedTwitterSearch = () => {
   const dropdownResultId = "[data-testid=typeaheadResult";
 
   // HTML ELEMENTS
+  const headEl = document.head;
   const inputEl = querySelector(inputId);
   const dropdownEl = querySelector(dropdownId);
   const emptyDropdownEl = querySelector(emptyDropdownId);
   const dropdownResultEl = querySelector(dropdownResultId);
+  const styleEl = createElement("style");
 
   // STYLES
-  const style = createElement("style");
-  head.appendChild(style);
+  headEl.appendChild(styleEl);
   const css = `
     ${inputId} { 
       padding: 8px;
     }
   `;
-  style.appendChild(createTextNode(css)); // https://stackoverflow.com/a/524721
+  styleEl.appendChild(createTextNode(css)); // https://stackoverflow.com/a/524721
 
   // CONSOLE GREETING
   return "Hello, enhanced Twitter!";
