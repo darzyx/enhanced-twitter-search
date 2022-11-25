@@ -51,7 +51,7 @@ const enhancedTwitterSearch = () => {
   inputEl.placeholder = "Search Twitter";
   css += `
     ${inputId} {
-      padding: 12px 12px 12px 13px;
+      padding: 12px;
     }
   `;
 
@@ -134,7 +134,8 @@ const enhancedTwitterSearch = () => {
   css += `
     .highlight {
       height: 100%;
-      padding: 2px 0px 1px 0px;
+      padding: 3px 2px 2px 2px;
+      margin: 0 0 0 -3px;
       background-color: rgba(29, 155, 240, 0.5);
       border-radius: 4px 0 0 4px;
     }
