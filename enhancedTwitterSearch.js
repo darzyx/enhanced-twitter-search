@@ -50,6 +50,9 @@ const enhancedTwitterSearch = () => {
   const inputId = "[data-testid=SearchBox_Search_Input]";
   const inputEl = querySelector(inputId);
   inputEl.placeholder = "Search Twitter";
+  inputEl.onSubmit = () => {
+    handleHighlightInputText();
+  };
   css += `
     ${inputId} {
       padding: 12px 12px 12px 11px;
@@ -85,8 +88,10 @@ const enhancedTwitterSearch = () => {
     }
   `;
 
-  inputEl.addEventListener("input", (e) => {
-    const inputValue = e.target.value;
+  const handleHighlightInputText = (didSubmit) => {
+    const inputValue = inputEl.value;
+
+    console.log({ inputValue });
 
     if (inputValue.length > 0) {
       inputDummyEl.innerHTML = `<span>${inputValue}</span>`;
@@ -105,8 +110,12 @@ const enhancedTwitterSearch = () => {
           let highlightedText = keyWord;
           let radius = "square-right";
           for (let k = i + keyWord.length; k < inputValue.length; k++) {
-            if (inputValue[k] === " ") {
-              highlightedText += inputValue.substring(i + keyWord.length, k);
+            if (
+              inputValue[k] === " " ||
+              (didSubmit && k === inputValue.length - 1)
+            ) {
+              const end = didSubmit && k === inputValue.length - 1 ? k + 1 : k;
+              highlightedText += inputValue.substring(i + keyWord.length, end);
               radius = "round-right";
               break;
             }
@@ -121,8 +130,13 @@ const enhancedTwitterSearch = () => {
         result += inputValue[i];
       }
     }
-    console.log({ result, inputValue });
     inputDummyEl.innerHTML = result;
+  };
+  inputEl.addEventListener("input", () => {
+    handleHighlightInputText(false);
+  });
+  searchEl.addEventListener("submit", () => {
+    handleHighlightInputText(true);
   });
 
   const listboxId = "[role=listbox]";
