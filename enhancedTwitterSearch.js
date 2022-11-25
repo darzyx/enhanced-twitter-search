@@ -97,19 +97,17 @@ const enhancedTwitterSearch = () => {
 
     let result = "";
     for (let i = 0; i < inputValue.length; i++) {
-      if ("from:" === inputValue.substring(i, i + 5)) {
-        result += highlight("from:");
-        i += 4;
-      } else if ("to:" === inputValue.substring(i, i + 3)) {
-        result += highlight("to:");
-        i += 2;
-      } else if ("min_faves:" === inputValue.substring(i, i + 10)) {
-        result += highlight("min_faves:");
-        i += 9;
-      } else if ("min_retweets:" === inputValue.substring(i, i + 13)) {
-        result += highlight("min_retweets:");
-        i += 12;
-      } else {
+      let foundKeyWord = false;
+      for (let j = 0; j < keyWords.length; j++) {
+        const keyWord = keyWords[j];
+        if (keyWord === inputValue.substring(i, i + keyWord.length)) {
+          foundKeyWord = true;
+          result += highlight(keyWord);
+          i += keyWord.length - 1;
+          break;
+        }
+      }
+      if (!foundKeyWord) {
         result += inputValue[i];
       }
     }
