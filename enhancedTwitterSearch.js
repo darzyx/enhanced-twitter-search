@@ -20,32 +20,24 @@ const enhancedTwitterSearch = () => {
   // Main search parent
   const searchId = "[role=search]";
   const searchEl = querySelector(searchId);
-  css += `
-  ${searchId} div {
-    border-radius: 4px;
-    border: none;
-  }`;
+  css += ``;
 
   // Background component
   const backgroundSearchContainerEl = searchEl.firstChild.firstChild;
   backgroundSearchContainerEl.id = "background-search-container";
-  css += `
-  #background-search-container {
-    background-color: #111;
-  }`;
+  css += ``;
 
   // Search icon
-  const searchLabelId = "[data-testid=SearchBox_Search_Input_label]";
-  const searchLabelEl = querySelector(searchLabelId);
-  const searchLabelChildren = searchLabelEl.getElementsByTagName("div");
-  searchLabelEl.removeChild(searchLabelChildren[0]);
+  // const searchLabelId = "[data-testid=SearchBox_Search_Input_label]";
+  // const searchLabelEl = querySelector(searchLabelId);
+  // const searchLabelChildren = searchLabelEl.getElementsByTagName("div");
+  // searchLabelEl.removeChild(searchLabelChildren[0]);
 
   // Clear button
   const clearButtonId = "[data-testid=clearButton]";
   const clearButtonEl = querySelector(clearButtonId);
   css += `
     ${clearButtonId} {
-      margin-right: 4px;
       background: transparent;
     }
     ${clearButtonId} svg {
@@ -56,22 +48,28 @@ const enhancedTwitterSearch = () => {
   // Input field
   const inputId = "[data-testid=SearchBox_Search_Input]";
   const inputEl = querySelector(inputId);
-  inputEl.placeholder = " Enhanced Twitter Search";
+  inputEl.placeholder = "Search Twitter";
   css += `
-  ${inputId} {
-    padding: 8px 6px;
-  }`;
+    ${inputId} {
+      padding: 12px 12px 12px 13px;
+    }
+  `;
 
   // Input parent for styling the dummy input
   const inputParentEl = querySelector(inputId).parentNode;
   inputParentEl.id = "input-parent";
-  css += `#${inputParentEl.id} { 
-    position: relative; 
-  }`;
+  css += `
+    #${inputParentEl.id} { 
+      position: relative;
+      height: 100%;
+    }
+  `;
 
   // Dummy input
   const inputDummyEl = createElement("div");
   inputDummyEl.id = "input-dummy";
+  inputDummyEl.innerHTML = `<span>Search Twitter</span>`;
+  inputParentEl.insertBefore(inputDummyEl, inputEl);
   css += `
     #input-dummy {
       position: absolute;
@@ -79,16 +77,12 @@ const enhancedTwitterSearch = () => {
       left: 0;
       width: 100%;
       height: 100%;
-      padding: 8px 4px;
+      padding: 12px;
       background-color: transparent;
       color: rgba(255, 0, 0, 0);
       z-index: -1;
-      margin: 0;
     }
   `;
-  inputDummyEl.innerHTML = `<span>Search Twitter</span>`;
-  inputParentEl.insertBefore(inputDummyEl, inputEl);
-  css += ``;
 
   inputEl.addEventListener("input", (e) => {
     const inputValue = e.target.value;
@@ -139,9 +133,10 @@ const enhancedTwitterSearch = () => {
   // STYLES
   css += `
     .highlight {
-      padding: 4px 0px 4px 2px;
-      background-color: ${mutedBgColor};
-      border-radius: 2px 0 0 2px;
+      height: 100%;
+      padding: 2px 0px 1px 0px;
+      background-color: rgba(29, 155, 240, 0.5);
+      border-radius: 4px 0 0 4px;
     }
   `;
   headEl.appendChild(styleEl);
