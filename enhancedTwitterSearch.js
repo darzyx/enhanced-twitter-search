@@ -10,7 +10,8 @@ const enhancedTwitterSearch = () => {
   const querySelector = document.querySelector.bind(document);
   const createElement = document.createElement.bind(document);
   const createTextNode = document.createTextNode.bind(document);
-  const highlight = (txt) => `<span class="highlight">${txt}</span>`;
+  const highlight = (txt, radius) =>
+    `<span class="highlight ${radius}">${txt}</span>`;
 
   // HTML ELEMENTS
   const headEl = document.head;
@@ -51,7 +52,7 @@ const enhancedTwitterSearch = () => {
   inputEl.placeholder = "Search Twitter";
   css += `
     ${inputId} {
-      padding: 12px;
+      padding: 12px 12px 12px 11px;
     }
   `;
 
@@ -101,9 +102,18 @@ const enhancedTwitterSearch = () => {
       for (let j = 0; j < keyWords.length; j++) {
         const keyWord = keyWords[j];
         if (keyWord === inputValue.substring(i, i + keyWord.length)) {
+          let highlightedText = keyWord;
+          let radius = "square-right";
+          for (let k = i + keyWord.length; k < inputValue.length; k++) {
+            if (inputValue[k] === " ") {
+              highlightedText += inputValue.substring(i + keyWord.length, k);
+              radius = "round-right";
+              break;
+            }
+          }
+          result += highlight(highlightedText, radius);
+          i += highlightedText.length - 1;
           foundKeyWord = true;
-          result += highlight(keyWord);
-          i += keyWord.length - 1;
           break;
         }
       }
@@ -134,8 +144,13 @@ const enhancedTwitterSearch = () => {
       height: 100%;
       padding: 3px 2px 2px 2px;
       margin: 0 0 0 -3px;
-      background-color: rgba(29, 155, 240, 0.5);
+      background-color: rgba(29, 155, 240, 0.75);
+    }
+    .square-right {
       border-radius: 4px 0 0 4px;
+    }
+    .round-right {
+      border-radius: 4px 4px 4px 4px;
     }
   `;
   headEl.appendChild(styleEl);
