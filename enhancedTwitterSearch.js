@@ -10,6 +10,7 @@ const enhancedTwitterSearch = () => {
   const querySelector = document.querySelector.bind(document);
   const createElement = document.createElement.bind(document);
   const createTextNode = document.createTextNode.bind(document);
+  const highlight = (txt) => `<span class="highlight">${txt}</span>`;
 
   // HTML ELEMENTS
   const headEl = document.head;
@@ -58,7 +59,7 @@ const enhancedTwitterSearch = () => {
   inputEl.placeholder = " Enhanced Twitter Search";
   css += `
   ${inputId} {
-    padding: 12px;
+    padding: 8px 6px;
   }`;
 
   // Input parent for styling the dummy input
@@ -78,7 +79,7 @@ const enhancedTwitterSearch = () => {
       left: 0;
       width: 100%;
       height: 100%;
-      padding: 12px 10px;
+      padding: 8px 4px;
       background-color: transparent;
       color: rgba(255, 0, 0, 0);
       z-index: -1;
@@ -91,22 +92,35 @@ const enhancedTwitterSearch = () => {
 
   inputEl.addEventListener("input", (e) => {
     const inputValue = e.target.value;
-    console.log({ inputValue });
 
     if (inputValue.length > 0) {
-      console.log({ inputValue });
       inputDummyEl.innerHTML = `<span>${inputValue}</span>`;
     } else {
       inputDummyEl.innerHTML = `<span>Search Twitter</span>`;
     }
 
-    if (inputValue.includes("from:")) {
-      console.log({ inputValue, index: inputValue.indexOf("from:") });
-      inputDummyEl.innerHTML = inputValue.replace(
-        "from:",
-        `<span class="highlight">from:</span>`
-      );
+    const keyWords = ["from:", "to:", "min_faves:", "min_retweets:"];
+
+    let result = "";
+    for (let i = 0; i < inputValue.length; i++) {
+      if ("from:" === inputValue.substring(i, i + 5)) {
+        result += highlight("from:");
+        i += 4;
+      } else if ("to:" === inputValue.substring(i, i + 3)) {
+        result += highlight("to:");
+        i += 2;
+      } else if ("min_faves:" === inputValue.substring(i, i + 10)) {
+        result += highlight("min_faves:");
+        i += 9;
+      } else if ("min_retweets:" === inputValue.substring(i, i + 13)) {
+        result += highlight("min_retweets:");
+        i += 12;
+      } else {
+        result += inputValue[i];
+      }
     }
+    console.log({ result, inputValue });
+    inputDummyEl.innerHTML = result;
   });
 
   const listboxId = "[role=listbox]";
@@ -125,7 +139,7 @@ const enhancedTwitterSearch = () => {
   // STYLES
   css += `
     .highlight {
-      padding: 2px 1px;
+      padding: 4px 0px 4px 2px;
       background-color: ${mutedBgColor};
       border-radius: 2px 0 0 2px;
     }
