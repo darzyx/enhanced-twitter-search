@@ -58,9 +58,7 @@ const enhancedTwitterSearch = () => {
   inputEl.placeholder = " Enhanced Twitter Search";
   css += `
   ${inputId} {
-    padding: 3px 3px 2px 3px;
-    border-radius: 2px;
-    font-size: 18px;
+    padding: 12px;
   }`;
 
   // Input parent for styling the dummy input
@@ -80,12 +78,11 @@ const enhancedTwitterSearch = () => {
       left: 0;
       width: 100%;
       height: 100%;
+      padding: 12px 10px;
       background-color: transparent;
       color: rgba(255, 0, 0, 0);
       z-index: -1;
       margin: 0;
-      padding: 3px 3px 2px 3px;
-      font-size: 18px;
     }
   `;
   inputDummyEl.innerHTML = `<span>Search Twitter</span>`;
@@ -128,6 +125,7 @@ const enhancedTwitterSearch = () => {
   // STYLES
   css += `
     .highlight {
+      padding: 2px 1px;
       background-color: ${mutedBgColor};
       border-radius: 2px 0 0 2px;
     }
