@@ -50,8 +50,16 @@ const enhancedTwitterSearch = () => {
   const inputId = "[data-testid=SearchBox_Search_Input]";
   const inputEl = querySelector(inputId);
   inputEl.placeholder = "Search Twitter";
-  inputEl.onSubmit = () => {
-    handleHighlightInputText();
+  const handleAddEndSpace = (e) => {
+    // Check if the last character is a space. If not, add a space
+    // This is to separate highlighted words from other input content
+    if (e.target.value.slice(-1) !== " ") {
+      inputEl.value += " ";
+      inputDummyEl.innerHTML += " ";
+    }
+  };
+  inputEl.onclick = (e) => {
+    handleAddEndSpace(e);
   };
   css += `
     ${inputId} {
@@ -88,7 +96,7 @@ const enhancedTwitterSearch = () => {
     }
   `;
 
-  const handleHighlightInputText = (didSubmit) => {
+  const handleHighlightInputText = (didSubmit = false) => {
     const inputValue = inputEl.value;
 
     console.log({ inputValue });
@@ -107,21 +115,28 @@ const enhancedTwitterSearch = () => {
       for (let j = 0; j < keyWords.length; j++) {
         const keyWord = keyWords[j];
         if (keyWord === inputValue.substring(i, i + keyWord.length)) {
-          let highlightedText = keyWord;
+          let highlightStr = keyWord;
           let radius = "square-right";
           for (let k = i + keyWord.length; k < inputValue.length; k++) {
             if (
               inputValue[k] === " " ||
-              (didSubmit && k === inputValue.length - 1)
+              (inputValue[k] !== " " &&
+                didSubmit &&
+                k === inputValue.length - 1)
             ) {
-              const end = didSubmit && k === inputValue.length - 1 ? k + 1 : k;
-              highlightedText += inputValue.substring(i + keyWord.length, end);
+              const end =
+                inputValue[k] !== " " &&
+                didSubmit &&
+                k === inputValue.length - 1
+                  ? k + 1
+                  : k;
+              highlightStr += inputValue.substring(i + keyWord.length, end);
               radius = "round-right";
               break;
             }
           }
-          result += highlight(highlightedText, radius);
-          i += highlightedText.length - 1;
+          result += highlight(highlightStr, radius);
+          i += highlightStr.length - 1;
           foundKeyWord = true;
           break;
         }
@@ -132,6 +147,8 @@ const enhancedTwitterSearch = () => {
     }
     inputDummyEl.innerHTML = result;
   };
+  // Execute immediately for any existing text:
+  handleHighlightInputText(true);
   inputEl.addEventListener("input", () => {
     handleHighlightInputText(false);
   });
