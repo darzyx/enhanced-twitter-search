@@ -189,7 +189,11 @@ const enhancedTwitterSearch = () => {
     handleDeleteKeyWordIfNeeded();
     handleHighlightInputText(false);
   });
-  searchEl.addEventListener("submit", () => {
+  inputEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && inputEl.value.slice(-1) !== " ") {
+      e.preventDefault();
+      handleAddInputValueTrailingSpace();
+    }
     handleHighlightInputText(true);
   });
 
