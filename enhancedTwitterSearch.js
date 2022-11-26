@@ -214,8 +214,8 @@ const enhancedTwitterSearch = () => {
   css += `
     .highlight {
       height: 100%;
-      padding: 3px 2px 2px 2px;
-      margin: 0 0 0 -3px;
+      padding: 2px 1px 1px 1px;
+      margin: 0 -1px;
       background-color: rgba(29, 155, 240, 0.75);
     }
     .square-right {
