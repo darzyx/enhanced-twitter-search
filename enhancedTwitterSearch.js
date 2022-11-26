@@ -49,18 +49,8 @@ const enhancedTwitterSearch = () => {
   // Input field
   const inputId = "[data-testid=SearchBox_Search_Input]";
   const inputEl = querySelector(inputId);
+  let inputElPrevValue = inputEl.value.slice();
   inputEl.placeholder = "Search Twitter";
-  const handleAddEndSpace = (e) => {
-    // Check if the last character is a space. If not, add a space
-    // This is to separate highlighted words from other input content
-    if (e.target.value.slice(-1) !== " ") {
-      inputEl.value += " ";
-      inputDummyEl.innerHTML += " ";
-    }
-  };
-  inputEl.onclick = (e) => {
-    handleAddEndSpace(e);
-  };
   css += `
     ${inputId} {
       padding: 12px 12px 12px 11px;
@@ -97,9 +87,8 @@ const enhancedTwitterSearch = () => {
   `;
 
   const handleHighlightInputText = (didSubmit = false) => {
+    console.log("handleHighlightInputText");
     const inputValue = inputEl.value;
-
-    console.log({ inputValue });
 
     if (inputValue.length > 0) {
       inputDummyEl.innerHTML = `<span>${inputValue}</span>`;
@@ -149,7 +138,30 @@ const enhancedTwitterSearch = () => {
   };
   // Execute immediately for any existing text:
   handleHighlightInputText(true);
-  inputEl.addEventListener("input", () => {
+  inputEl.addEventListener("input", (e) => {
+    const newValue = e.target.value;
+    if (newValue.length < inputElPrevValue.length) {
+      const tempPrevValue = inputElPrevValue.slice();
+      inputElPrevValue = newValue.slice();
+      // Find the deleted character
+      let deletedChar = "";
+      let deletedCharIndex = -1;
+      for (let i = 0; i < tempPrevValue.length; i++) {
+        if (tempPrevValue[i] !== newValue[i]) {
+          deletedChar = tempPrevValue[i];
+          deletedCharIndex = i;
+          break;
+        }
+      }
+
+      if (deletedChar === " " && deletedCharIndex > -1) {
+        // Delete the space and everything before it
+        inputEl.value = newValue.slice(deletedCharIndex, newValue.length);
+      }
+    } else {
+      inputElPrevValue = inputEl.value.slice();
+    }
+
     handleHighlightInputText(false);
   });
   searchEl.addEventListener("submit", () => {
