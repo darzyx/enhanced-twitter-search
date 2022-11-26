@@ -51,6 +51,21 @@ const enhancedTwitterSearch = () => {
   const inputEl = querySelector(inputId);
   let inputElPrevValue = inputEl.value.slice();
   inputEl.placeholder = "Search Twitter";
+  const handleAddInputValueTrailingSpace = () => {
+    // If the last character is not a space, add one. This is to separate
+    // keywords from other input content.
+    if (inputEl.value.slice(-1) !== " ") {
+      console.log("ADDING TRAILING SPACE");
+      inputEl.value += " ";
+      inputElPrevValue = inputEl.value.slice();
+      inputDummyEl.innerHTML += " ";
+    }
+  };
+  inputEl.onclick = (e) => {
+    e.preventDefault();
+    console.log("CLICKED");
+    handleAddInputValueTrailingSpace();
+  };
   css += `
     ${inputId} {
       padding: 12px 12px 12px 11px;
@@ -138,8 +153,8 @@ const enhancedTwitterSearch = () => {
   };
   // Execute immediately for any existing text:
   handleHighlightInputText(true);
-  inputEl.addEventListener("input", (e) => {
-    const newValue = e.target.value;
+  inputEl.addEventListener("input", () => {
+    const newValue = inputEl.value;
     if (newValue.length < inputElPrevValue.length) {
       const tempPrevValue = inputElPrevValue.slice();
       inputElPrevValue = newValue.slice();
