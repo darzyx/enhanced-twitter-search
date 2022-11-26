@@ -154,15 +154,14 @@ const enhancedTwitterSearch = () => {
   // Execute immediately for any existing text:
   handleHighlightInputText(true);
   inputEl.addEventListener("input", () => {
-    const newValue = inputEl.value;
-    if (newValue.length < inputElPrevValue.length) {
+    if (inputEl.value.length < inputElPrevValue.length) {
       const tempPrevValue = inputElPrevValue.slice();
-      inputElPrevValue = newValue.slice();
+      inputElPrevValue = inputEl.value.slice();
       // Find the deleted character
       let deletedChar = "";
       let deletedCharIndex = -1;
       for (let i = 0; i < tempPrevValue.length; i++) {
-        if (tempPrevValue[i] !== newValue[i]) {
+        if (tempPrevValue[i] !== inputEl.value[i]) {
           deletedChar = tempPrevValue[i];
           deletedCharIndex = i;
           break;
@@ -170,8 +169,19 @@ const enhancedTwitterSearch = () => {
       }
 
       if (deletedChar === " " && deletedCharIndex > -1) {
-        // Delete the space and everything before it
-        inputEl.value = newValue.slice(deletedCharIndex, newValue.length);
+        // If there is a space before the deleted character, find its index
+        let spaceIndex = -1;
+        for (let i = deletedCharIndex - 1; i >= 0; i--) {
+          if (tempPrevValue[i] === " ") {
+            spaceIndex = i;
+            break;
+          }
+        }
+
+        // Delete the string in between the space and the deleted character
+        inputEl.value =
+          inputEl.value.slice(0, spaceIndex + 1) +
+          inputEl.value.slice(deletedCharIndex, inputEl.value.length);
       }
     } else {
       inputElPrevValue = inputEl.value.slice();
